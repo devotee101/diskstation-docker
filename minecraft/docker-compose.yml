@@ -1,0 +1,79 @@
+version: "3"
+services:
+  minecraft:
+    container_name: minecraft
+    entrypoint:
+      - /start
+    environment:
+      - PATH=/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - LANG=en_US.UTF-8
+      - LANGUAGE=en_US:en
+      - LC_ALL=en_US.UTF-8
+      - JAVA_VERSION=jdk-17.0.1+12
+      - JAVA_HOME=/opt/java/openjdk
+      - UID=1000
+      - GID=1000
+      - MEMORY=2G
+      - TYPE=SPIGOT
+      - VERSION=LATEST
+      - ENABLE_RCON=false
+      - RCON_PORT=25575
+      - RCON_PASSWORD=
+      - ENABLE_AUTOPAUSE=false
+      - AUTOPAUSE_TIMEOUT_EST=3600
+      - AUTOPAUSE_TIMEOUT_KN=120
+      - AUTOPAUSE_TIMEOUT_INIT=600
+      - AUTOPAUSE_PERIOD=10
+      - AUTOPAUSE_KNOCK_INTERFACE=eth0
+      - JVM_XX_OPTS=-XX:+UseG1GC
+      - FORGEVERSION=RECOMMENDED
+      - SPONGEBRANCH=STABLE
+      - SPONGEVERSION=
+      - FABRICVERSION=LATEST
+      - LEVEL=world
+      - PVP=true
+      - DIFFICULTY=easy
+      - LEVEL_TYPE=DEFAULT
+      - SERVER_PORT=25565
+      - ONLINE_MODE=FALSE
+      - SERVER_NAME=Seddon
+      - REPLACE_ENV_VARIABLES=FALSE
+      - ENV_VARIABLE_PREFIX=CFG_
+      - EULA=TRUE
+    hostname: 7cd46755f563
+    image: itzg/minecraft-server:latest
+    ipc: private
+    labels:
+      com.docker.compose.config-hash: c5e2f77c418ef9436417680e44efc5fabf381e9a0de5f8111e2d7d67ff13cc34
+      com.docker.compose.container-number: 1
+      com.docker.compose.oneoff: False
+      com.docker.compose.project: minecraft
+      com.docker.compose.project.config_files: docker-compose.yml
+      com.docker.compose.project.working_dir: /volume1/homes/devotee101/src/minecraft
+      com.docker.compose.service: spigotserver
+      com.docker.compose.version: 1.28.5
+      org.opencontainers.image.authors: Geoff Bourne <itzgeoff@gmail.com>
+      org.opencontainers.image.created: 2021-12-14T03:35:29.207Z
+      org.opencontainers.image.description: Docker image that provides a Minecraft
+        Server that will automatically download selected version at startup
+      org.opencontainers.image.licenses: Apache-2.0
+      org.opencontainers.image.revision: 9dee47cb6d69e79db5f240cd3667cb4e3a3d0739
+      org.opencontainers.image.source: https://github.com/itzg/docker-minecraft-server
+      org.opencontainers.image.title: docker-minecraft-server
+      org.opencontainers.image.url: https://github.com/itzg/docker-minecraft-server
+      org.opencontainers.image.version: master
+    logging:
+      driver: json-file
+      options: {}
+    networks:
+      - minecraft_default
+    ports:
+      - 25565:25565/tcp
+      - 25575:25575/tcp
+    restart: unless-stopped
+    volumes:
+      - /volume1/docker/minecraft:/data:rw
+    working_dir: /data
+networks:
+  minecraft_default:
+    external: true

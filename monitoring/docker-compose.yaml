@@ -1,0 +1,78 @@
+version: '3'
+services:
+  cortex:
+    image: ubuntu/cortex
+    container_name: cortex
+    volumes:
+    - /volume1/docker/monitoring/cortex/single-process-config-blocks.yaml:/etc/single-process-config-blocks.yaml
+    ports:
+    - 9009:9009
+    networks:
+    - loki
+    restart: unless-stopped
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+    - /volume1/docker/monitoring/grafana:/var/lib/grafana
+    ports:
+    - 3333:3000
+    networks:
+    - loki
+    user: '1029'
+    restart: unless-stopped
+  loki:
+    image: grafana/loki:2.4.1
+    command: -config.file=/etc/loki/loki-config.yml
+    container_name: loki
+    volumes:
+    - /volume1/docker/monitoring/loki:/etc/loki
+    ports:
+    - 3100:3100
+    networks:
+    - loki
+    restart: unless-stopped
+  promtail:
+    image: grafana/promtail:2.4.1
+    command: -config.file=/etc/promtail/promtail-config.yml
+    container_name: promtail
+    volumes:
+    - /var/log:/var/log
+    - /volume1/docker/monitoring/promtail:/etc/promtail
+    # ports:
+    #   - "1514:1514" # this is only needed if you are going to send syslogs
+    networks:
+    - loki
+    restart: unless-stopped
+  node-exporter:
+    privileged: true
+    image: prom/node-exporter
+    container_name: node-exporter
+    restart: always
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.ignored-mount-points"
+      - "^/(rootfs/)?(dev|etc|host|proc|run|sys|volume1)($$|/)"
+  agent:
+    image: grafana/agent:latest
+    container_name: agent
+    volumes:
+      - ./agent/config:/etc/agent-config
+      - /var/log:/var/log
+    entrypoint:
+      - /bin/agent
+      - -config.file=/etc/agent-config/agent.yaml
+      - -prometheus.wal-directory=/tmp/agent/wal
+    ports:
+      - "12345:12345"
+    networks:
+    - loki
+networks:
+  loki:

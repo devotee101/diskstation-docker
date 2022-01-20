@@ -1,0 +1,23 @@
+texecom:
+    host: 192.168.1.4 # Required: Texecom panel IP address
+    udl_password: "1234" # Optional: UDL password programmed in the panel. Note: this is NOT the code used to arm/disarm the panel (default: 1234)
+    port: 10001 # Optional: port used to connect to the panel (default: 10001)
+
+mqtt:
+    host: 192.168.1.5 # Optional: broker URL or IP address (default: localhost)
+    username: texecom
+    password: Y5!qrFxpssXLt@
+
+homeassistant:
+    discovery: true # Optional: enable Home Assistant discovery (default: false)
+
+areas:
+    - id: house
+      name: House Alarm
+      full_arm: armed_away
+      part_arm_1: armed_home
+      part_arm_2: armed_night
+      part_arm_3: armed_custom_bypass
+
+log:
+    info

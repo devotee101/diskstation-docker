@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+
+  speedtest:
+    image: moafrancky/speedtest2mqtt:latest
+    container_name: speedtest2mqtt
+    environment:
+      - MQTT_HOST=192.168.1.5
+      - MQTT_USER=speedtest
+      - MQTT_PASS=H8hq9asVxaiTvS
+    restart: unless-stopped

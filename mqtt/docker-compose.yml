@@ -1,0 +1,22 @@
+version: "3"
+services:
+  mqtt:
+    command:
+      - /usr/sbin/mosquitto -c /mosquitto/config/mosquitto.conf
+   image: eclipse-mosquitto:openssl
+   logging:
+      driver: loki:latest
+      options:
+        loki-batch-size: 400
+        loki-url: http://localhost:3100/loki/api/v1/push
+    networks:
+      - host
+    restart: always
+    volumes:
+      - /volume1/docker/mqtt/config:/mosquitto/config
+      - /volume1/docker/mqtt/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - /volume1/docker/mqtt/data:/mosquitto/data
+      - fee5dc48f0ef3df4ace682c37b5087cec8afa951b18301a17f8cc6812bccf3c3:/mosquitto/log
+networks:
+  host:
+    external: true

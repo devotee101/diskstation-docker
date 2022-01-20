@@ -1,0 +1,8 @@
+version: "3"
+services:
+    texecom2mqtt:
+        container_name: texecom2mqtt
+        image: dchesterton/texecom2mqtt:latest
+        restart: unless-stopped
+        volumes:
+            - ./config.yml:/app/config.yml

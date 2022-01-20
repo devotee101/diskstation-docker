@@ -1,0 +1,45 @@
+version: '3'
+services:
+  esphome:
+    image: esphome/esphome:latest
+    container_name: esphome
+    volumes:
+    - /volume1/docker/automation/home-assistant/esphome:/config
+    network_mode: host
+    environment:
+    - TZ=Europe/London
+    restart: unless-stopped
+  home-assistant:
+    image: homeassistant/home-assistant:latest
+    container_name: home-assistant
+    volumes:
+    - /usr/syno/etc/certificate/system/default:/certificate
+    - /volume1/docker/automation/home-assistant:/config
+    ports:
+    - 8123:8123/tcp
+    networks:
+    - automation
+    environment:
+    - TZ=Europe/London
+    restart: unless-stopped
+  vscode:
+    image: codercom/code-server:latest
+    container_name: vscode
+    volumes:
+    - /volume1/docker/automation/home-assistant:/home/coder/project
+    - /volume1/docker/automation/vscode:/home/coder/.local/share/code-server
+    ports:
+    - 8888:8080/tcp
+    networks:
+    - automation
+    environment:
+    - PASSWORD=12345678
+    - USER=coder
+    user: 1000:1000
+    restart: unless-stopped
+networks:
+  automation:
+    ipam:
+      config:
+      - subnet: 172.50.0.0/16
+      driver: default
