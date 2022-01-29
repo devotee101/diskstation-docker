@@ -35,10 +35,19 @@ services:
     environment:
     - PASSWORD=12345678
     - USER=coder
-    user: 1000:1000
+    user: 1029:100
     restart: unless-stopped
+  mqtt:
+    image: eclipse-mosquitto:openssl
+    container_name: mqtt
+    network_mode: host
+    volumes:
+      - /volume1/docker/automation/mqtt/config:/mosquitto/config
+      - /volume1/docker/automation/mqtt/data:/mosquitto/data
+      - /volume1/docker/automation/mqtt/log:/mosquitto/log
 networks:
   automation:
+    name: automation
     ipam:
       config:
       - subnet: 172.50.0.0/16
